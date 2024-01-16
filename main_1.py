@@ -1,5 +1,7 @@
 import pygame as py
 
+import main
+
 py.font.init()
 d = {}
 ARIAl_50 = py.font.SysFont('arial', 100, 2)
@@ -10,24 +12,40 @@ class Menu:
         self.options_surfaces = []
         self.callbacks = []
         self.current_option = 0
+        self.flag = True
+
+    def flag_menu(self, flag):
+        self.flag = flag
+
+    def flag_report(self):
+        return self.flag
+
+    def reset_options(self):
+        self.current_option = 0
 
     def append_option(self, option, callback):
-        self.options_surfaces.append(ARIAl_50.render(option, True, (0, 0, 0)))
-        self.callbacks.append(callback)
+        if self.flag:
+            self.options_surfaces.append(ARIAl_50.render(option, True, (0, 0, 0)))
+            self.callbacks.append(callback)
 
     def switch(self, direction):
-        self.current_option = max(0, min(self.current_option + direction, len(self.options_surfaces) - 1))
+        if self.flag:
+            self.current_option = max(0, min(self.current_option + direction, len(self.options_surfaces) - 1))
 
     def select(self):
-        self.callbacks[self.current_option]()
+        if self.flag:
+            for elem in self.callbacks[self.current_option]:
+                elem()
+            main.py.display.update()
 
     def draw(self, surface, x, y, option_y_padding):
-        for i, option in enumerate(self.options_surfaces):
-            option_rect = option.get_rect()
-            option_rect.topleft = (x, y + i * option_y_padding)
-            if i == self.current_option:
-                py.draw.rect(surface, (0, 100, 0), option_rect)
-            surface.blit(option, option_rect)
+        if self.flag:
+            for i, option in enumerate(self.options_surfaces):
+                option_rect = option.get_rect()
+                option_rect.topleft = (x, y + i * option_y_padding)
+                if i == self.current_option:
+                    py.draw.rect(surface, (0, 100, 0), option_rect)
+                surface.blit(option, option_rect)
 
 
 def create_column(screen, color, x, y, part, count):
