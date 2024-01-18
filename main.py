@@ -2,17 +2,15 @@ import pygame as py
 import main_1
 import sprite
 
+py.init()
 FPS = 60
 
 if __name__ == "__main__":
-    py.init()
+    running = True
     size = py.display.Info()
     screen = py.display.set_mode((size.current_w, size.current_h))
     width, height = size.current_w, size.current_h
-    clock = py.time.Clock()
-    running = True
     part = int(height / 8)
-
 
 
     def draw():
@@ -22,10 +20,6 @@ if __name__ == "__main__":
             game_menu.draw(screen, part * 4, part * 2, part)
             py.display.update()
 
-
-    # main_1.create_board(screen, (255, 255, 255), width, height)
-    # print(main_1.d)
-    # print(part)
 
     menu = main_1.Menu()
     menu.append_option('Играть', (lambda: game_menu.flag_menu(True),))
@@ -72,13 +66,9 @@ if __name__ == "__main__":
                     game_menu.select()
                     menu.flag_menu(False)
                     draw()
-        if game_menu.show_difficult() > 0:
-            king = sprite.load_image('king_r.png')
-            king_g = py.sprite.Group()
-            king_g.add(king)
-            king.rect.x = 1000
-            king.rect.y = 180
-            king_g.draw(screen)
+        if game_menu.show_difficult() == 1:
+            start_beginner = main_1.Sprite(part)
+            start_beginner.beginner_start(screen)
             py.display.update()
-        draw()
+
     py.quit()
