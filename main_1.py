@@ -13,6 +13,13 @@ class Menu:
         self.callbacks = []
         self.current_option = 0
         self.flag = True
+        self.difficulty = 0
+
+    def show_difficult(self):
+        return self.difficulty
+
+    def game_difficulty(self, difficulty):
+        self.difficulty = difficulty
 
     def flag_menu(self, flag):
         self.flag = flag
@@ -50,6 +57,7 @@ class Menu:
 
 def create_column(screen, color, x, y, part, count):
     for i in range(8):
+        global d
         count += 1
         py.draw.rect(screen, color, (x + 5, y + 5, part - 10, part - 10))
         y += part
@@ -67,3 +75,4 @@ def create_board(screen, color, width, height):
         create_column(screen, color, x, y, part, count)
         count += 8
         x += part
+
