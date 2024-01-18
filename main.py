@@ -70,5 +70,14 @@ if __name__ == "__main__":
             start_beginner = main_1.Sprite(part)
             start_beginner.beginner_start(screen)
             py.display.update()
+        elif game_menu.show_difficult() == 2:
+            start_amateur = main_1.Sprite(part)
+            start_amateur.amateur_start(screen)
+            py.display.update()
+        elif game_menu.show_difficult() == 3:
+            start_master = main_1.Sprite(part)
+            start_master.master_start(screen)
+            py.display.update()
+
 
     py.quit()

@@ -6,6 +6,7 @@ import main
 py.font.init()
 ARIAl_50 = py.font.SysFont('arial', 100, 2)
 sprite_group = py.sprite.Group()
+laser_group = py.sprite.Group()
 size = py.display.Info()
 screen = py.display.set_mode((size.current_w, size.current_h))
 width, height = size.current_w, size.current_h
@@ -105,6 +106,16 @@ def load_image(name, part):
     return sprite
 
 
+def load_image_laser():
+    global part
+    fullname = os.path.join('data', 'laser.png')
+    image = py.image.load(fullname)
+    image = py.transform.scale(image, (part // 4, part))
+    sprite = py.sprite.Sprite(laser_group)
+    sprite.image = image
+    sprite.rect = sprite.image.get_rect()
+
+
 class Sprite:
     def __init__(self, part):
         self.king_r = load_image('king_r.png', part)
@@ -113,14 +124,64 @@ class Sprite:
         self.death_star_r = load_image('The_death_star_r.png', part)
         self.death_star_b = load_image('The_death_star_b.png', part)
 
-        corner_dl_b = load_image('corner_dl_b.png', part)
-        corner_dl_r = load_image('corner_dl_r.png', part)
+        self.corner_dl_b = load_image('corner_dl_b.png', part)
+        self.corner_dl_r = load_image('corner_dl_r.png', part)
 
-        corner_dr_b = load_image('corner_dr_b.png', part)
-        corner_dr_r = load_image('corner_dr_r.png', part)
+        self.corner_dr_b = load_image('corner_dr_b.png', part)
+        self.corner_dr_r = load_image('corner_dr_r.png', part)
+
+        self.corner_ul_b = load_image('corner_ul_b.png', part)
+        self.corner_ul_r = load_image('corner_ul_r.png', part)
+
+        self.corner_ur_b = load_image('corner_ur_b.png', part)
+        self.corner_ur_r = load_image('corner_ur_r.png', part)
+
+        self.key_l_b = load_image('key_l_b.png', part)
+        self.key_l_r = load_image('key_l_r.png', part)
+
+        self.key_r_b = load_image('key_r_b.png', part)
+        self.key_r_r = load_image('key_r_r.png', part)
+
+    def laser_sprite(self):
+        self.laser = load_image_laser()
 
     def beginner_start(self, screen):
         d = create_dict()
+        self.key_r_r.rect.x = d[70][0]
+        self.key_r_r.rect.y = d[70][1]
+
+        self.key_r_b.rect.x = d[11][0]
+        self.key_r_b.rect.y = d[11][1]
+
+        self.key_l_r.rect.x = d[47][0]
+        self.key_l_r.rect.y = d[47][1]
+
+        self.key_l_b.rect.x = d[34][0]
+        self.key_l_b.rect.y = d[34][1]
+
+        self.corner_ur_r.rect.x = d[55][0]
+        self.corner_ur_r.rect.y = d[55][1]
+
+        self.corner_ur_b.rect.x = d[19][0]
+        self.corner_ur_b.rect.y = d[19][1]
+
+        self.corner_ul_r.rect.x = d[63][0]
+        self.corner_ul_r.rect.y = d[63][1]
+
+        self.corner_ul_b.rect.x = d[27][0]
+        self.corner_ul_b.rect.y = d[27][1]
+
+        self.corner_dr_r.rect.x = d[54][0]
+        self.corner_dr_r.rect.y = d[54][1]
+
+        self.corner_dr_b.rect.x = d[18][0]
+        self.corner_dr_b.rect.y = d[18][1]
+
+        self.corner_dl_r.rect.x = d[62][0]
+        self.corner_dl_r.rect.y = d[62][1]
+
+        self.corner_dl_b.rect.x = d[26][0]
+        self.corner_dl_b.rect.y = d[26][1]
 
         self.king_b.rect.x = d[10][0]
         self.king_b.rect.y = d[10][1]
@@ -128,6 +189,109 @@ class Sprite:
         self.king_r.rect.x = d[71][0]
         self.king_r.rect.y = d[71][1]
 
+        self.death_star_b.rect.x = d[1][0]
+        self.death_star_b.rect.y = d[1][1]
+
+        self.death_star_r.rect.x = d[80][0]
+        self.death_star_r.rect.y = d[80][1]
+
+        sprite_group.draw(screen)
+
+    def amateur_start(self, screen):
+        d = create_dict()
+        self.key_r_r.rect.x = d[70][0]
+        self.key_r_r.rect.y = d[70][1]
+
+        self.key_r_b.rect.x = d[11][0]
+        self.key_r_b.rect.y = d[11][1]
+
+        self.key_l_r.rect.x = d[47][0]
+        self.key_l_r.rect.y = d[47][1]
+
+        self.key_l_b.rect.x = d[34][0]
+        self.key_l_b.rect.y = d[34][1]
+
+        self.corner_ur_r.rect.x = d[55][0]
+        self.corner_ur_r.rect.y = d[55][1]
+
+        self.corner_ur_b.rect.x = d[19][0]
+        self.corner_ur_b.rect.y = d[19][1]
+
+        self.corner_ul_r.rect.x = d[63][0]
+        self.corner_ul_r.rect.y = d[63][1]
+
+        self.corner_ul_b.rect.x = d[27][0]
+        self.corner_ul_b.rect.y = d[27][1]
+
+        self.corner_dr_r.rect.x = d[54][0]
+        self.corner_dr_r.rect.y = d[54][1]
+
+        self.corner_dr_b.rect.x = d[18][0]
+        self.corner_dr_b.rect.y = d[18][1]
+
+        self.corner_dl_r.rect.x = d[62][0]
+        self.corner_dl_r.rect.y = d[62][1]
+
+        self.corner_dl_b.rect.x = d[26][0]
+        self.corner_dl_b.rect.y = d[26][1]
+
+        self.king_b.rect.x = d[66][0]
+        self.king_b.rect.y = d[66][1]
+
+        self.king_r.rect.x = d[15][0]
+        self.king_r.rect.y = d[15][1]
+
+        self.death_star_b.rect.x = d[1][0]
+        self.death_star_b.rect.y = d[1][1]
+
+        self.death_star_r.rect.x = d[80][0]
+        self.death_star_r.rect.y = d[80][1]
+
+        sprite_group.draw(screen)
+
+    def master_start(self, screen):
+        d = create_dict()
+        self.key_r_r.rect.x = d[23][0]
+        self.key_r_r.rect.y = d[23][1]
+
+        self.key_r_b.rect.x = d[34][0]
+        self.key_r_b.rect.y = d[34][1]
+
+        self.key_l_r.rect.x = d[47][0]
+        self.key_l_r.rect.y = d[47][1]
+
+        self.key_l_b.rect.x = d[67][0]
+        self.key_l_b.rect.y = d[67][1]
+
+        self.corner_ur_r.rect.x = d[55][0]
+        self.corner_ur_r.rect.y = d[55][1]
+
+        self.corner_ur_b.rect.x = d[20][0]
+        self.corner_ur_b.rect.y = d[20][1]
+
+        self.corner_ul_r.rect.x = d[17][0]
+        self.corner_ul_r.rect.y = d[17][1]
+
+        self.corner_ul_b.rect.x = d[27][0]
+        self.corner_ul_b.rect.y = d[27][1]
+
+        self.corner_dr_r.rect.x = d[53][0]
+        self.corner_dr_r.rect.y = d[53][1]
+
+        self.corner_dr_b.rect.x = d[18][0]
+        self.corner_dr_b.rect.y = d[18][1]
+
+        self.corner_dl_r.rect.x = d[63][0]
+        self.corner_dl_r.rect.y = d[63][1]
+
+        self.corner_dl_b.rect.x = d[26][0]
+        self.corner_dl_b.rect.y = d[26][1]
+
+        self.king_b.rect.x = d[66][0]
+        self.king_b.rect.y = d[66][1]
+
+        self.king_r.rect.x = d[15][0]
+        self.king_r.rect.y = d[15][1]
 
         self.death_star_b.rect.x = d[1][0]
         self.death_star_b.rect.y = d[1][1]
