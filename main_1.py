@@ -11,6 +11,7 @@ size = py.display.Info()
 screen = py.display.set_mode((size.current_w, size.current_h))
 width, height = size.current_w, size.current_h
 part = int(height / 8)
+dict_sprite_location = {}
 
 
 class Menu:
@@ -67,7 +68,8 @@ def create_column(screen, color, x, y, part):
         y += part
 
 
-def create_board(screen, color, width, height):
+def create_board(screen, color):
+    global width, height
     part = int(height / 8)
     y = 0
     x = int((width - part * 10) / 2)
@@ -94,7 +96,8 @@ def create_dict():
     return d
 
 
-def load_image(name, part):
+def load_image(name):
+    global part
     global sprite_group
     fullname = os.path.join('data', name)
     image = py.image.load(fullname)
@@ -116,86 +119,113 @@ def load_image_laser():
     sprite.rect = sprite.image.get_rect()
 
 
+def check_location(pos_mouse):
+    for value, key in dict_sprite_location.items():
+        if (value[0] - pos_mouse[0]) <= 180 and (value[1] - pos_mouse[1]) <= 180:
+            select_sprite = key
+        return select_sprite
+
+
 class Sprite:
-    def __init__(self, part):
-        self.king_r = load_image('king_r.png', part)
-        self.king_b = load_image('king_b.png', part)
+    def __init__(self):
+        py.sprite.Sprite.__init__(self)
+        self.king_r = load_image('king_r.png')
+        self.king_b = load_image('king_b.png')
 
-        self.death_star_r = load_image('The_death_star_r.png', part)
-        self.death_star_b = load_image('The_death_star_b.png', part)
+        self.death_star_r = load_image('The_death_star_r.png')
+        self.death_star_b = load_image('The_death_star_b.png')
 
-        self.corner_dl_b = load_image('corner_dl_b.png', part)
-        self.corner_dl_r = load_image('corner_dl_r.png', part)
+        self.corner_dl_b = load_image('corner_dl_b.png')
+        self.corner_dl_r = load_image('corner_dl_r.png')
 
-        self.corner_dr_b = load_image('corner_dr_b.png', part)
-        self.corner_dr_r = load_image('corner_dr_r.png', part)
+        self.corner_dr_b = load_image('corner_dr_b.png')
+        self.corner_dr_r = load_image('corner_dr_r.png')
 
-        self.corner_ul_b = load_image('corner_ul_b.png', part)
-        self.corner_ul_r = load_image('corner_ul_r.png', part)
+        self.corner_ul_b = load_image('corner_ul_b.png')
+        self.corner_ul_r = load_image('corner_ul_r.png')
 
-        self.corner_ur_b = load_image('corner_ur_b.png', part)
-        self.corner_ur_r = load_image('corner_ur_r.png', part)
+        self.corner_ur_b = load_image('corner_ur_b.png')
+        self.corner_ur_r = load_image('corner_ur_r.png')
 
-        self.key_l_b = load_image('key_l_b.png', part)
-        self.key_l_r = load_image('key_l_r.png', part)
+        self.key_l_b = load_image('key_l_b.png')
+        self.key_l_r = load_image('key_l_r.png')
 
-        self.key_r_b = load_image('key_r_b.png', part)
-        self.key_r_r = load_image('key_r_r.png', part)
+        self.key_r_b = load_image('key_r_b.png')
+        self.key_r_r = load_image('key_r_r.png')
+        self.flag = True
 
     def laser_sprite(self):
         self.laser = load_image_laser()
 
-    def beginner_start(self, screen):
+    def flag_regulator(self, flag):
+        self.flag = flag
+
+    def show_flag(self):
+        return self.flag
+
+    def moving_sprites(self):
         d = create_dict()
-        self.key_r_r.rect.x = d[70][0]
-        self.key_r_r.rect.y = d[70][1]
-
-        self.key_r_b.rect.x = d[11][0]
-        self.key_r_b.rect.y = d[11][1]
-
-        self.key_l_r.rect.x = d[47][0]
-        self.key_l_r.rect.y = d[47][1]
-
-        self.key_l_b.rect.x = d[34][0]
-        self.key_l_b.rect.y = d[34][1]
-
-        self.corner_ur_r.rect.x = d[55][0]
-        self.corner_ur_r.rect.y = d[55][1]
-
-        self.corner_ur_b.rect.x = d[19][0]
-        self.corner_ur_b.rect.y = d[19][1]
-
-        self.corner_ul_r.rect.x = d[63][0]
-        self.corner_ul_r.rect.y = d[63][1]
-
-        self.corner_ul_b.rect.x = d[27][0]
-        self.corner_ul_b.rect.y = d[27][1]
-
-        self.corner_dr_r.rect.x = d[54][0]
-        self.corner_dr_r.rect.y = d[54][1]
-
-        self.corner_dr_b.rect.x = d[18][0]
-        self.corner_dr_b.rect.y = d[18][1]
-
-        self.corner_dl_r.rect.x = d[62][0]
-        self.corner_dl_r.rect.y = d[62][1]
-
-        self.corner_dl_b.rect.x = d[26][0]
-        self.corner_dl_b.rect.y = d[26][1]
-
-        self.king_b.rect.x = d[10][0]
-        self.king_b.rect.y = d[10][1]
-
-        self.king_r.rect.x = d[71][0]
-        self.king_r.rect.y = d[71][1]
-
-        self.death_star_b.rect.x = d[1][0]
-        self.death_star_b.rect.y = d[1][1]
-
-        self.death_star_r.rect.x = d[80][0]
-        self.death_star_r.rect.y = d[80][1]
+        self.king_r.rect.x = d[72][0]
+        self.king_r.rect.y = d[72][1]
 
         sprite_group.draw(screen)
+
+    def beginner_start(self, screen):
+        if self.flag:
+            d = create_dict()
+            self.key_r_r.rect.x = d[70][0]
+            self.key_r_r.rect.y = d[70][1]
+
+            self.key_r_b.rect.x = d[11][0]
+            self.key_r_b.rect.y = d[11][1]
+
+            self.key_l_r.rect.x = d[47][0]
+            self.key_l_r.rect.y = d[47][1]
+
+            self.key_l_b.rect.x = d[34][0]
+            self.key_l_b.rect.y = d[34][1]
+
+            self.corner_ur_r.rect.x = d[55][0]
+            self.corner_ur_r.rect.y = d[55][1]
+
+            self.corner_ur_b.rect.x = d[19][0]
+            self.corner_ur_b.rect.y = d[19][1]
+
+            self.corner_ul_r.rect.x = d[63][0]
+            self.corner_ul_r.rect.y = d[63][1]
+
+            self.corner_ul_b.rect.x = d[27][0]
+            self.corner_ul_b.rect.y = d[27][1]
+
+            self.corner_dr_r.rect.x = d[54][0]
+            self.corner_dr_r.rect.y = d[54][1]
+
+            self.corner_dr_b.rect.x = d[18][0]
+            self.corner_dr_b.rect.y = d[18][1]
+
+            self.corner_dl_r.rect.x = d[62][0]
+            self.corner_dl_r.rect.y = d[62][1]
+
+            self.corner_dl_b.rect.x = d[26][0]
+            self.corner_dl_b.rect.y = d[26][1]
+
+            self.king_b.rect.x = d[10][0]
+            self.king_b.rect.y = d[10][1]
+
+            self.king_r.rect.x = d[71][0]
+            self.king_r.rect.y = d[71][1]
+
+            self.death_star_b.rect.x = d[1][0]
+            self.death_star_b.rect.y = d[1][1]
+
+            self.death_star_r.rect.x = d[80][0]
+            self.death_star_r.rect.y = d[80][1]
+            dict_sprite_location = {'king_r': d[17], 'king_b': d[10], 'corner_dl_b': d[26], 'corner_dl_r': d[62],
+                                    'corner_dr_b': d[18], 'corner_dr_r': d[54], 'corner_ul_b': d[27],
+                                    'corner_ul_r': d[63], 'corner_ur_b': d[19], 'corner_ur_r': d[55], 'key_l_b': d[34],
+                                    'key_l_r': d[47], 'key_r_b': d[11], 'key_r_r': d[70]}
+
+            sprite_group.draw(screen)
 
     def amateur_start(self, screen):
         d = create_dict()
@@ -246,6 +276,10 @@ class Sprite:
 
         self.death_star_r.rect.x = d[80][0]
         self.death_star_r.rect.y = d[80][1]
+        dict_sprite_location = {'king_r': d[15], 'king_b': d[66], 'corner_dl_b': d[26],
+                                'corner_dl_r': d[62], 'corner_dr_b': d[18], 'corner_dr_r': d[54], 'corner_ul_b': d[27],
+                                'corner_ul_r': d[63], 'corner_ur_b': d[19], 'corner_ur_r': d[55], 'key_l_b': d[34],
+                                'key_l_r': d[47], 'key_r_b': d[11], 'key_r_r': d[70]}
 
         sprite_group.draw(screen)
 
@@ -298,5 +332,9 @@ class Sprite:
 
         self.death_star_r.rect.x = d[80][0]
         self.death_star_r.rect.y = d[80][1]
+        dict_sprite_location = {'king_r': d[15], 'king_b': d[66], 'corner_dl_b': d[26],
+                                'corner_dl_r': d[63], 'corner_dr_b': d[18], 'corner_dr_r': d[53], 'corner_ul_b': d[27],
+                                'corner_ul_r': d[17], 'corner_ur_b': d[20], 'corner_ur_r': d[55], 'key_l_b': d[67],
+                                'key_l_r': d[47], 'key_r_b': d[34], 'key_r_r': d[23]}
 
         sprite_group.draw(screen)

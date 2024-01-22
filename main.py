@@ -1,6 +1,7 @@
 import pygame as py
+import pygame.mouse
+
 import main_1
-import sprite
 
 py.init()
 FPS = 60
@@ -21,6 +22,10 @@ if __name__ == "__main__":
             py.display.update()
 
 
+    def draw_board():
+        main_1.create_board(screen, (255, 255, 255))
+
+
     menu = main_1.Menu()
     menu.append_option('Играть', (lambda: game_menu.flag_menu(True),))
     menu.append_option('Статистика', (lambda: screen.fill((255, 255, 255)),))
@@ -29,13 +34,13 @@ if __name__ == "__main__":
     game_menu = main_1.Menu()
     game_menu.append_option('Выберите сложность:', (lambda: 0,))
     game_menu.append_option('Новичок', (
-        lambda: screen.fill((0, 0, 0)), lambda: main_1.create_board(screen, (255, 255, 255), width, height),
+        lambda: screen.fill((0, 0, 0)), lambda: main_1.create_board(screen, (255, 255, 255)),
         lambda: game_menu.flag_menu(False), lambda: game_menu.game_difficulty(1)))
     game_menu.append_option('Любитель', (
-        lambda: screen.fill((0, 0, 0)), lambda: main_1.create_board(screen, (255, 255, 255), width, height),
+        lambda: screen.fill((0, 0, 0)), lambda: main_1.create_board(screen, (255, 255, 255)),
         lambda: game_menu.flag_menu(False), lambda: game_menu.game_difficulty(2)))
     game_menu.append_option('Профессионал', (
-        lambda: screen.fill((0, 0, 0)), lambda: main_1.create_board(screen, (255, 255, 255), width, height),
+        lambda: screen.fill((0, 0, 0)), lambda: main_1.create_board(screen, (255, 255, 255)),
         lambda: game_menu.flag_menu(False), lambda: game_menu.game_difficulty(3)))
     game_menu.flag_menu(False)
 
@@ -66,18 +71,27 @@ if __name__ == "__main__":
                     game_menu.select()
                     menu.flag_menu(False)
                     draw()
+                elif event.key == py.K_w:
+                    draw_board()
+                    start_beginner.flag_regulator(False)
+                    start_beginner.moving_sprites()
+                    py.display.update()
+                elif event.type == py.MOUSEBUTTONDOWN:
+                    pos = py.mouse.get_pos()
+                    figure = main_1.check_location(pos)
+                    print(figure)
+
         if game_menu.show_difficult() == 1:
-            start_beginner = main_1.Sprite(part)
+            start_beginner = main_1.Sprite()
             start_beginner.beginner_start(screen)
             py.display.update()
         elif game_menu.show_difficult() == 2:
-            start_amateur = main_1.Sprite(part)
+            start_amateur = main_1.Sprite()
             start_amateur.amateur_start(screen)
             py.display.update()
         elif game_menu.show_difficult() == 3:
-            start_master = main_1.Sprite(part)
+            start_master = main_1.Sprite()
             start_master.master_start(screen)
             py.display.update()
-
 
     py.quit()
